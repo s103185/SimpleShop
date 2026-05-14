@@ -1,9 +1,9 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
-wwwroot\images\fountain_pen.jpg
-wwwroot\images\keyboard.jpg
-wwwroot\images\mouse.jpg
-wwwroot\images\notebook.jpg
+wwwroot\images\MSZ-006 Z.jpg
+wwwroot\images\RX-0.jpg
+wwwroot\images\RX-78-2.jpg
+wwwroot\images\ZGMF-X20A.jpg
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
