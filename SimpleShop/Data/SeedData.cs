@@ -54,35 +54,35 @@ namespace SimpleShop.Data
                 context.Products.AddRange(
                     new Product
                     {
-                        Name = "精美筆記本",
-                        Description = "高品質書寫用紙，適合各種筆類。",
+                        Name = "RX-78-2 鋼彈 (Gundam)",
+                        Description = "造型簡單大方，是所有鋼彈模型的技術指標，收藏必收的首選。",
                         Price = 150.00m,
                         StockQuantity = 100,
-                        ImageUrl = "/images/notebook.jpg" // 假設圖片放在 wwwroot/images/
+                        ImageUrl = "/images/RX-78-2.jpg" // 假設圖片放在 wwwroot/images/
                     },
                     new Product
                     {
-                        Name = "專業鋼筆",
-                        Description = "流暢書寫體驗，商務人士首選。",
+                        Name = "MSZ-006 Z 鋼彈 (Zeta Gundam)",
+                        Description = "結構精密，模型展現了高難度的變形設計，視覺感非常前衛。",
                         Price = 150.00m,
                         StockQuantity = 100,
-                        ImageUrl = "/images/fountain_pen.jpg" // 假設圖片放在 wwwroot/images/
+                        ImageUrl = "/images/MSZ-006 Z.jpg" // 假設圖片放在 wwwroot/images/
                     },
                     new Product
                     {
-                        Name = "無線滑鼠",
-                        Description = "人體工學設計，長時間使用依然舒適。",
+                        Name = "RX-0 獨角獸鋼彈 (Unicorn Gundam)",
+                        Description = "全白外觀可展開變形成「毀滅模式」，露出內部紅色的框架，視覺效果極其華麗。",
                         Price = 150.00m,
                         StockQuantity = 100,
-                        ImageUrl = "/images/mouse.jpg" // 假設圖片放在 wwwroot/images/
+                        ImageUrl = "/images/RX-0.jpg" // 假設圖片放在 wwwroot/images/
                     },
                     new Product
                     {
-                        Name = "機械鍵盤",
-                        Description = "青軸手感，電競與程式設計師的最愛。",
+                        Name = "攻擊自由鋼彈 (Strike Freedom Gundam)",
+                        Description = "標誌性的金色骨架與藍色大翅膀，張開後的「全彈發射」姿勢帥氣度滿分。",
                         Price = 150.00m,
                         StockQuantity = 100,
-                        ImageUrl = "/images/keyboard.jpg" // 假設圖片放在 wwwroot/images/
+                        ImageUrl = "/images/ZGMF-X20A.jpg" // 假設圖片放在 wwwroot/images/
                     }
                 );
                 await context.SaveChangesAsync();
