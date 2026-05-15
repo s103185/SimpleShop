@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services; // 這一行是關鍵
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace SimpleShop.Services
 {
-    public class EmailSender : IEmailSender // 這裡的 IEmailSender 會解析為 Microsoft.AspNetCore.Iden
+    public class EmailSender : IEmailSender
     {
         private readonly IConfiguration _configuration;
         private readonly SmtpSettings _smtpSettings;
@@ -15,52 +15,52 @@ namespace SimpleShop.Services
         public EmailSender(IConfiguration configuration)
         {
             _configuration = configuration;
+            // 讀取 appsettings.json 或環境變數中的 SmtpSettings
             _smtpSettings = _configuration.GetSection("SmtpSettings").Get<SmtpSettings>()
                             ?? new SmtpSettings();
         }
 
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            // ... (郵件發送邏輯不變) ...
-            Debug.WriteLine($"----------------------- ATTEMPTING TO SEND EMAIL -----------------------");
-            Debug.WriteLine($"To: {email}");
-            Debug.WriteLine($"Subject: {subject}");
-            Debug.WriteLine($"Message: (HTML)");
-            Debug.WriteLine($"SMTP Host: {_smtpSettings.Server}");
-            Debug.WriteLine($"SMTP Port: {_smtpSettings.Port}");
-            Debug.WriteLine($"SMTP User: {_smtpSettings.Username}");
-            Debug.WriteLine($"------------------------ ----------------------- -----------------------");
-
-            if (string.IsNullOrEmpty(_smtpSettings.Server) || string.IsNullOrEmpty(_smtpSettings.Username) || string.IsNullOrEmpty(_smtpSettings.FromAddress))
+            // 檢查必要設定是否存在
+            if (string.IsNullOrEmpty(_smtpSettings.Server) ||
+                string.IsNullOrEmpty(_smtpSettings.Username) ||
+                string.IsNullOrEmpty(_smtpSettings.FromAddress))
             {
-                Debug.WriteLine("SMTP settings (Server, Username, or FromAddress) are not configured or incomplete. Email not sent.");
-                return Task.CompletedTask;
+                Console.WriteLine("警告：SMTP 設定不完整，無法寄送郵件。");
+                return;
             }
 
             try
             {
-                var client = new SmtpClient(_smtpSettings.Server, _smtpSettings.Port)
+                using (var client = new SmtpClient(_smtpSettings.Server, _smtpSettings.Port))
                 {
-                    Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password),
-                    EnableSsl = _smtpSettings.EnableSsl
-                };
+                    client.Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password);
+                    client.EnableSsl = _smtpSettings.EnableSsl;
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(_smtpSettings.FromAddress, _smtpSettings.FromName),
-                    Subject = subject,
-                    Body = htmlMessage,
-                    IsBodyHtml = true,
-                };
-                mailMessage.To.Add(email);
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(_smtpSettings.FromAddress, _smtpSettings.FromName),
+                        Subject = subject,
+                        Body = htmlMessage,
+                        IsBodyHtml = true,
+                    };
+                    mailMessage.To.Add(email);
 
-                return client.SendMailAsync(mailMessage);
+                    // 使用 await 確保非同步執行完成
+                    await client.SendMailAsync(mailMessage);
+                    Console.WriteLine($"成功寄送郵件至: {email}");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error sending email: {ex.Message}");
-                // 實際應用中應記錄此錯誤
-                return Task.FromException(ex);
+                // 當寄信失敗時，只在後台日誌紀錄原因，不影響前端註冊流程
+                Console.WriteLine("==================================================");
+                Console.WriteLine($"[郵件發送失敗] 目的地: {email}");
+                Console.WriteLine($"錯誤訊息: {ex.Message}");
+                Console.WriteLine("==================================================");
+
+                // 這裡不 return Task.FromException(ex)，而是讓程式繼續走下去
             }
         }
     }
